@@ -1,4 +1,4 @@
-# vue-click-to-component
+# [vue-click-to-component](https://ctc.zjffun.com/docs/vue)
 
 [![npm](https://img.shields.io/npm/v/vue-click-to-component)](https://www.npmjs.com/package/vue-click-to-component)
 
@@ -6,13 +6,14 @@ English | [简体中文](./README.zh-CN.md)
 
 <kbd>Option+Click</kbd>(<kbd>Alt+Click</kbd>) a element in the browser to **instantly** goto the source in your editor.
 
-![Vite Demo](./images/vite.webp)
+Online Demo: <https://ctc.zjffun.com/>
 
-<kbd>Option+RightClick</kbd>(<kbd>Alt+RightClick</kbd>) opens a context menu with the parent elements.
+![Vite Demo](./images/vite.webp)
 
 ## Features
 
 - <kbd>Option+Click</kbd>(<kbd>Alt+Click</kbd>) opens the immediate Component's source
+- <kbd>Option+RightClick</kbd>(<kbd>Alt+RightClick</kbd>) opens a context menu with the parent elements
 - Supports `vscode`, `vscode-insiders` and `webstorm`'s [URL handling](https://code.visualstudio.com/docs/editor/command-line#_opening-vs-code-with-urls)
 - Automatically **tree-shaken** from `production` builds
 

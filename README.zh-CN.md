@@ -1,4 +1,4 @@
-# vue-click-to-component
+# [vue-click-to-component](https://ctc.zjffun.com/docs/vue)
 
 [![npm](https://img.shields.io/npm/v/vue-click-to-component)](https://www.npmjs.com/package/vue-click-to-component)
 
@@ -6,11 +6,14 @@
 
 在浏览器中按住 <kbd>Option</kbd>(<kbd>Alt</kbd>) 点击组件，**立即**在编辑器中打开对应代码。
 
+在线测试：<https://ctc.zjffun.com/>
+
 ![Vite Demo](./images/vite.webp)
 
 ## 功能
 
 - 按住 <kbd>Option</kbd>(<kbd>Alt</kbd>) 点击打开组件对应的代码
+- 按住 <kbd>Option</kbd>(<kbd>Alt</kbd>) 右键点击打开带有父元素的菜单
 - 支持 `vscode`、 `vscode-insiders` 和 `webstorm` 的 [URL 打开](https://code.visualstudio.com/docs/editor/command-line#_opening-vs-code-with-urls)
 - 自动“摇树优化”，不会打包到生产代码中
 
