@@ -13,7 +13,6 @@ import Test from './components/Test.vue'
     </a>
   </div>
   <HelloWorld msg="Vite + Vue" />
-  <Test />
 </template>
 
 <style scoped>

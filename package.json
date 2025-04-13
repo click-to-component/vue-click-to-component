@@ -10,13 +10,13 @@
     "vue-cli",
     "vite"
   ],
-  "homepage": "https://github.com/zjffun/vue-click-to-component#readme",
+  "homepage": "https://github.com/click-to-component/vue-click-to-component#readme",
   "bugs": {
-    "url": "https://github.com/zjffun/vue-click-to-component/issues"
+    "url": "https://github.com/click-to-component/vue-click-to-component/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zjffun/vue-click-to-component.git"
+    "url": "git+https://github.com/click-to-component/vue-click-to-component.git"
   },
   "license": "MIT",
   "author": "Jufeng Zhang <zjffun@gmail.com>",

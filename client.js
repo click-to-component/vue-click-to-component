@@ -73,7 +73,7 @@ if (process.env.NODE_ENV === "development") {
       if (
         typeof window.__VUE_CLICK_TO_COMPONENT_URL_FUNCTION__ !== "function"
       ) {
-        // Fix https://github.com/zjffun/vue-click-to-component/issues/4
+        // Fix https://github.com/click-to-component/vue-click-to-component/issues/4
         if (sourceCodeLocation.startsWith("/")) {
           return `vscode://file${sourceCodeLocation}`;
         }

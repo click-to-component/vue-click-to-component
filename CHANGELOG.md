@@ -25,7 +25,7 @@ Add Alt+RightClick to open the element list feature.
 
 # v0.3.1
 
-Fix URI. [#4](https://github.com/zjffun/vue-click-to-component/issues/4)
+Fix URI. [#4](https://github.com/click-to-component/vue-click-to-component/issues/4)
 
 # v0.3.0
 
