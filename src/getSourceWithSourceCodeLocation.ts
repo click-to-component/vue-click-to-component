@@ -7,7 +7,7 @@ function getSourceWithSourceCodeLocation({
 }: {
   source: string;
   filePath: string;
-  htmlTags: string[];
+  htmlTags: readonly string[];
 }) {
   const ast = parseFragment(source, {
     sourceCodeLocationInfo: true,
@@ -41,6 +41,14 @@ function getSourceWithSourceCodeLocation({
       startOffsetSet.add(startOffset);
 
       if (!htmlTags.includes(node?.nodeName)) {
+        return false;
+      }
+
+      // Make sure the length of nodeName is equal to the length of the real nodeName in the source
+      // For example, <image /> will be parsed as img in the ast
+      // Tag name state: https://html.spec.whatwg.org/multipage/parsing.html#tag-name-state
+      // eslint-disable-next-line no-control-regex
+      if (!/[\u0009\u000A\u000C\u0020\u002F\u003E\u000D]/.test(source[startOffset + node.nodeName.length + 1])) {
         return false;
       }
 
