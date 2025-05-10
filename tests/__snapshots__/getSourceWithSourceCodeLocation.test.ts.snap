@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getSourceWithSourceCodeLocation <image /> should not add source code location 1`] = `"<template><image /></template>"`;
+
+exports[`getSourceWithSourceCodeLocation <image\\r> should not add source code location 1`] = `
+"<template><image
+></template>"
+`;
+
+exports[`getSourceWithSourceCodeLocation <img /> should add source code location 1`] = `"<template><img data-__source-code-location="test.vue:1:11"  /></template>"`;
+
+exports[`getSourceWithSourceCodeLocation <img/> should add source code location 1`] = `"<template><img data-__source-code-location="test.vue:1:11" /></template>"`;
+
+exports[`getSourceWithSourceCodeLocation <img> should add source code location 1`] = `"<template><img data-__source-code-location="test.vue:1:11" ></template>"`;
+
+exports[`getSourceWithSourceCodeLocation <img\\r> should add source code location 1`] = `
+"<template><img data-__source-code-location="test.vue:1:11" 
+></template>"
+`;
+
+exports[`getSourceWithSourceCodeLocation <img\\t> should add source code location 1`] = `"<template><img data-__source-code-location="test.vue:1:11" 	></template>"`;
