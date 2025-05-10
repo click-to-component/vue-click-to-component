@@ -1,3 +1,7 @@
+# v0.3.8
+
+- Fix html tag alias. [#7](https://github.com/click-to-component/vue-click-to-component/issues/7)
+
 # v0.3.7
 
 - Add show source code location in the popover feature.
