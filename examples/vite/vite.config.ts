@@ -4,5 +4,8 @@ import vueClickToComponent from 'vue-click-to-component/vite-plugin';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vueClickToComponent(), vue()],
+  plugins: [
+    vueClickToComponent(),
+    vue()
+  ],
 })

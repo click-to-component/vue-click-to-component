@@ -1,117 +1,116 @@
-if (process.env.NODE_ENV === "development") {
-  console.warn("[vue-click-to-component] enabled");
+console.info("[vue-click-to-component] enabled");
 
-  function setTarget(el, type = "") {
-    el.setAttribute("vue-click-to-component-target", type);
-  }
+function setTarget(el, type = "") {
+  el.setAttribute("vue-click-to-component-target", type);
+}
 
-  function cleanTarget(type) {
-    /**
-     * @type {NodeListOf<Element>}
-     */
-    let targetElList;
-
-    if (type) {
-      targetElList = document.querySelectorAll(
-        `[vue-click-to-component-target="${type}"]`,
-      );
-    } else {
-      targetElList = document.querySelectorAll(
-        "[vue-click-to-component-target]",
-      );
-    }
-
-    targetElList.forEach((el) => {
-      el.removeAttribute("vue-click-to-component-target");
-    });
-  }
-
+function cleanTarget(type) {
   /**
-   * @param {MouseEvent} clickEvent
-   * @returns {boolean}
+   * @type {NodeListOf<Element>}
    */
-  function checkHandleAltClick(clickEvent) {
-    if (!clickEvent.altKey || clickEvent.button !== 0) {
-      return false;
-    }
+  let targetElList;
 
-    let el = clickEvent.target;
-
-    try {
-      while (
-        el &&
-        !el.hasAttribute("vue-click-to-component-ignore-alt-click")
-      ) {
-        el = el.parentElement;
-      }
-    } catch (error) {
-      return false;
-    }
-
-    if (el) {
-      return false;
-    }
-
-    return true;
+  if (type) {
+    targetElList = document.querySelectorAll(
+      `[vue-click-to-component-target="${type}"]`,
+    );
+  } else {
+    targetElList = document.querySelectorAll(
+      "[vue-click-to-component-target]",
+    );
   }
 
-  function getElWithSourceCodeLocation(el) {
-    try {
-      while (el && !el.dataset.__sourceCodeLocation) {
-        el = el.parentElement;
-      }
-    } catch (error) {
-      return null;
-    }
+  targetElList.forEach((el) => {
+    el.removeAttribute("vue-click-to-component-target");
+  });
+}
 
-    return el;
+/**
+ * @param {MouseEvent} clickEvent
+ * @returns {boolean}
+ */
+function checkHandleAltClick(clickEvent) {
+  if (!clickEvent.altKey || clickEvent.button !== 0) {
+    return false;
   }
 
-  function openEditor(sourceCodeLocation) {
-    // __VUE_CLICK_TO_COMPONENT_URL_FUNCTION__ can be async
-    const urlPromise = Promise.resolve().then(() => {
-      if (
-        typeof window.__VUE_CLICK_TO_COMPONENT_URL_FUNCTION__ !== "function"
-      ) {
-        // Fix https://github.com/click-to-component/vue-click-to-component/issues/4
-        if (sourceCodeLocation.startsWith("/")) {
-          return `vscode://file${sourceCodeLocation}`;
-        }
+  let el = clickEvent.target;
 
-        return `vscode://file/${sourceCodeLocation}`;
+  try {
+    while (
+      el &&
+      !el.hasAttribute("vue-click-to-component-ignore-alt-click")
+    ) {
+      el = el.parentElement;
+    }
+  } catch (error) {
+    return false;
+  }
+
+  if (el) {
+    return false;
+  }
+
+  return true;
+}
+
+function getElWithSourceCodeLocation(el) {
+  try {
+    while (el && !el.dataset.__sourceCodeLocation) {
+      el = el.parentElement;
+    }
+  } catch (error) {
+    return null;
+  }
+
+  return el;
+}
+
+function openEditor(sourceCodeLocation) {
+  // __VUE_CLICK_TO_COMPONENT_URL_FUNCTION__ can be async
+  const urlPromise = Promise.resolve().then(() => {
+    if (
+      typeof window.__VUE_CLICK_TO_COMPONENT_URL_FUNCTION__ !== "function"
+    ) {
+      // Fix https://github.com/click-to-component/vue-click-to-component/issues/4
+      if (sourceCodeLocation.startsWith("/")) {
+        return `vscode://file${sourceCodeLocation}`;
       }
 
-      return window.__VUE_CLICK_TO_COMPONENT_URL_FUNCTION__({
-        sourceCodeLocation,
-      });
+      return `vscode://file/${sourceCodeLocation}`;
+    }
+
+    return window.__VUE_CLICK_TO_COMPONENT_URL_FUNCTION__({
+      sourceCodeLocation,
     });
+  });
 
-    urlPromise
-      .then((url) => {
-        if (!url) {
-          console.error(
-            "[vue-click-to-component] url is empty, please check __VUE_CLICK_TO_COMPONENT_URL_FUNCTION__",
-          );
-          return;
-        }
+  urlPromise
+    .then((url) => {
+      if (!url) {
+        console.error(
+          "[vue-click-to-component] url is empty, please check __VUE_CLICK_TO_COMPONENT_URL_FUNCTION__",
+        );
+        return;
+      }
 
-        window.location.assign(url);
-      })
-      .catch((e) => {
-        console.error(e);
-      })
-      .finally(() => {
-        cleanTarget();
-      });
-  }
+      window.location.assign(url);
+    })
+    .catch((e) => {
+      console.error(e);
+    })
+    .finally(() => {
+      cleanTarget();
+    });
+}
 
-  // this funciton will update after vue-click-to-component-popover is defined
-  let hidePopover = () => {};
+// this funciton will update after vue-click-to-component-popover is defined
+let hidePopover = () => {};
 
-  // Alt+Click CSS
-  document.head.insertAdjacentHTML(
-    "beforeend",
-    `
+// Alt+Click CSS
+document.head.insertAdjacentHTML(
+  "beforeend",
+  `
 <style type="text/css" key="vue-click-to-component-style">
   [vue-click-to-component] * {
     pointer-events: auto !important;
@@ -134,203 +133,203 @@ if (process.env.NODE_ENV === "development") {
     }
   }
 </style>`.trim(),
-  );
+);
 
-  window.addEventListener(
-    "click",
-    (e) => {
-      hidePopover();
+window.addEventListener(
+  "click",
+  (e) => {
+    hidePopover();
 
-      if (checkHandleAltClick(e)) {
-        const elWithSourceCodeLocation = getElWithSourceCodeLocation(e.target);
-        if (!elWithSourceCodeLocation) {
-          return;
-        }
-
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-
-        const sourceCodeLocation =
-          elWithSourceCodeLocation.dataset.__sourceCodeLocation;
-
-        openEditor(sourceCodeLocation);
+    if (checkHandleAltClick(e)) {
+      const elWithSourceCodeLocation = getElWithSourceCodeLocation(e.target);
+      if (!elWithSourceCodeLocation) {
+        return;
       }
-    },
-    true,
-  );
 
-  window.addEventListener(
-    "mousemove",
-    (e) => {
-      cleanTarget("hover");
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
 
-      if (e.altKey) {
-        document.body.setAttribute("vue-click-to-component", "");
+      const sourceCodeLocation =
+        elWithSourceCodeLocation.dataset.__sourceCodeLocation;
 
-        const elWithSourceCodeLocation = getElWithSourceCodeLocation(e.target);
+      openEditor(sourceCodeLocation);
+    }
+  },
+  true,
+);
 
-        if (!elWithSourceCodeLocation) {
-          return;
-        }
+window.addEventListener(
+  "mousemove",
+  (e) => {
+    cleanTarget("hover");
 
-        setTarget(elWithSourceCodeLocation, "hover");
-      } else {
-        document.body.removeAttribute("vue-click-to-component");
+    if (e.altKey) {
+      document.body.setAttribute("vue-click-to-component", "");
+
+      const elWithSourceCodeLocation = getElWithSourceCodeLocation(e.target);
+
+      if (!elWithSourceCodeLocation) {
+        return;
       }
-    },
-    true,
-  );
 
-  window.addEventListener(
-    "keyup",
-    (e) => {
-      if (e.altKey) {
-        cleanTarget();
-        document.body.removeAttribute("vue-click-to-component");
-      }
-    },
-    true,
-  );
+      setTarget(elWithSourceCodeLocation, "hover");
+    } else {
+      document.body.removeAttribute("vue-click-to-component");
+    }
+  },
+  true,
+);
 
-  window.addEventListener(
-    "blur",
-    () => {
+window.addEventListener(
+  "keyup",
+  (e) => {
+    if (e.altKey) {
       cleanTarget();
       document.body.removeAttribute("vue-click-to-component");
-    },
-    true,
-  );
+    }
+  },
+  true,
+);
 
-  /* --- popover --- */
-  function initPopover() {
-    if (customElements.get("vue-click-to-component-popover")) {
-      console.warn("[vue-click-to-component] popover is already defined");
-      return;
+window.addEventListener(
+  "blur",
+  () => {
+    cleanTarget();
+    document.body.removeAttribute("vue-click-to-component");
+  },
+  true,
+);
+
+/* --- popover --- */
+function initPopover() {
+  if (customElements.get("vue-click-to-component-popover")) {
+    console.warn("[vue-click-to-component] popover is already defined");
+    return;
+  }
+
+  function cleanAnchor() {
+    document
+      .querySelectorAll("[vue-click-to-component-anchor]")
+      .forEach((el) => {
+        el.removeAttribute("vue-click-to-component-anchor");
+      });
+  }
+
+  function setAnchor(el) {
+    el.setAttribute("vue-click-to-component-anchor", "");
+  }
+
+  function getElListWithSourceCodeLocation(el) {
+    const elList = [];
+
+    let elWithSourceCodeLocation = getElWithSourceCodeLocation(el);
+
+    while (elWithSourceCodeLocation) {
+      elList.push(elWithSourceCodeLocation);
+      elWithSourceCodeLocation = getElWithSourceCodeLocation(
+        elWithSourceCodeLocation.parentElement,
+      );
     }
 
-    function cleanAnchor() {
-      document
-        .querySelectorAll("[vue-click-to-component-anchor]")
-        .forEach((el) => {
-          el.removeAttribute("vue-click-to-component-anchor");
-        });
+    return elList;
+  }
+
+  function getComponentInfoList(elList) {
+    const componentInfoList = [];
+
+    for (const el of elList) {
+      const componentInfo = {
+        el,
+        sourceCodeLocation: el.dataset.__sourceCodeLocation,
+        localName: el.localName,
+      };
+
+      componentInfoList.push(componentInfo);
     }
 
-    function setAnchor(el) {
-      el.setAttribute("vue-click-to-component-anchor", "");
-    }
+    return componentInfoList;
+  }
 
-    function getElListWithSourceCodeLocation(el) {
-      const elList = [];
-
-      let elWithSourceCodeLocation = getElWithSourceCodeLocation(el);
-
-      while (elWithSourceCodeLocation) {
-        elList.push(elWithSourceCodeLocation);
-        elWithSourceCodeLocation = getElWithSourceCodeLocation(
-          elWithSourceCodeLocation.parentElement,
-        );
+  customElements.define(
+    "vue-click-to-component-popover",
+    class extends HTMLElement {
+      static get observedAttributes() {
+        return [];
       }
 
-      return elList;
-    }
+      constructor() {
+        super();
 
-    function getComponentInfoList(elList) {
-      const componentInfoList = [];
+        this.componentInfoList = [];
 
-      for (const el of elList) {
-        const componentInfo = {
-          el,
-          sourceCodeLocation: el.dataset.__sourceCodeLocation,
-          localName: el.localName,
-        };
-
-        componentInfoList.push(componentInfo);
+        this.setStyle();
+        this.setForm();
       }
 
-      return componentInfoList;
-    }
+      updateComponentInfoList(componentInfoList) {
+        this.componentInfoList = componentInfoList;
+        this.listEl.innerHTML = "";
 
-    customElements.define(
-      "vue-click-to-component-popover",
-      class extends HTMLElement {
-        static get observedAttributes() {
-          return [];
-        }
+        for (const item of componentInfoList) {
+          const itemEL = document.createElement("li");
+          itemEL.classList.add("vue-click-to-component-popover__list__item");
 
-        constructor() {
-          super();
-
-          this.componentInfoList = [];
-
-          this.setStyle();
-          this.setForm();
-        }
-
-        updateComponentInfoList(componentInfoList) {
-          this.componentInfoList = componentInfoList;
-          this.listEl.innerHTML = "";
-
-          for (const item of componentInfoList) {
-            const itemEL = document.createElement("li");
-            itemEL.classList.add("vue-click-to-component-popover__list__item");
-
-            const buttonEl = document.createElement("button");
-            const sourceCodeLocationStr = item.sourceCodeLocation;
-            buttonEl.type = "submit";
-            buttonEl.value = sourceCodeLocationStr;
-            buttonEl.addEventListener("mouseenter", () => {
-              setTarget(item.el, "popover");
-            });
-            buttonEl.addEventListener("mouseleave", () => {
-              cleanTarget();
-            });
-            buttonEl.innerHTML = `<code>&lt;${item.localName}&gt;</code>
+          const buttonEl = document.createElement("button");
+          const sourceCodeLocationStr = item.sourceCodeLocation;
+          buttonEl.type = "submit";
+          buttonEl.value = sourceCodeLocationStr;
+          buttonEl.addEventListener("mouseenter", () => {
+            setTarget(item.el, "popover");
+          });
+          buttonEl.addEventListener("mouseleave", () => {
+            cleanTarget();
+          });
+          buttonEl.innerHTML = `<code>&lt;${item.localName}&gt;</code>
 <cite>
   <span dir="ltr">
     ${sourceCodeLocationStr.replace(/.*(src|pages)/, "$1")}
   </span>
 </cite>`;
 
-            itemEL.appendChild(buttonEl);
+          itemEL.appendChild(buttonEl);
 
-            this.listEl.appendChild(itemEL);
+          this.listEl.appendChild(itemEL);
+        }
+      }
+
+      setForm() {
+        const formEl = document.createElement("form");
+        formEl.addEventListener("submit", (e) => {
+          e.preventDefault();
+
+          const submitter = e.submitter;
+
+          if (submitter.tagName !== "BUTTON") {
+            return;
           }
-        }
 
-        setForm() {
-          const formEl = document.createElement("form");
-          formEl.addEventListener("submit", (e) => {
-            e.preventDefault();
+          const sourceCodeLocation = submitter.value;
 
-            const submitter = e.submitter;
+          if (!sourceCodeLocation) {
+            return;
+          }
 
-            if (submitter.tagName !== "BUTTON") {
-              return;
-            }
+          openEditor(sourceCodeLocation);
+          hidePopover();
+        });
 
-            const sourceCodeLocation = submitter.value;
+        const listEl = document.createElement("ul");
+        listEl.classList.add("vue-click-to-component-popover__list");
+        formEl.appendChild(listEl);
+        this.listEl = listEl;
 
-            if (!sourceCodeLocation) {
-              return;
-            }
+        this.appendChild(formEl);
+      }
 
-            openEditor(sourceCodeLocation);
-            hidePopover();
-          });
-
-          const listEl = document.createElement("ul");
-          listEl.classList.add("vue-click-to-component-popover__list");
-          formEl.appendChild(listEl);
-          this.listEl = listEl;
-
-          this.appendChild(formEl);
-        }
-
-        setStyle() {
-          const styleEl = document.createElement("style");
-          styleEl.textContent = `
+      setStyle() {
+        const styleEl = document.createElement("style");
+        styleEl.textContent = `
 .vue-click-to-component-popover__list {
   display: flex;
   flex-direction: column;
@@ -385,14 +384,14 @@ if (process.env.NODE_ENV === "development") {
   }
 }`;
 
-          this.appendChild(styleEl);
-        }
-      },
-    );
+        this.appendChild(styleEl);
+      }
+    },
+  );
 
-    document.body.insertAdjacentHTML(
-      "beforeend",
-      `
+  document.body.insertAdjacentHTML(
+    "beforeend",
+    `
 <style type="text/css" key="click-to-component-popover-style">
   [vue-click-to-component-anchor] {
     anchor-name: --vue-click-to-component-component-anchor;
@@ -411,59 +410,58 @@ if (process.env.NODE_ENV === "development") {
   }
 </style>
 <vue-click-to-component-popover popover="manual" vue-click-to-component-ignore-alt-click></vue-click-to-component-popover>`,
-    );
+  );
 
-    const vueClickToComponentPopoverEl = document.querySelector(
-      "vue-click-to-component-popover",
-    );
+  const vueClickToComponentPopoverEl = document.querySelector(
+    "vue-click-to-component-popover",
+  );
 
-    window.addEventListener(
-      "contextmenu",
-      (e) => {
-        if (e.altKey && e.button === 2) {
-          const elListWithSourceCodeLocationList =
-            getElListWithSourceCodeLocation(e.target);
+  window.addEventListener(
+    "contextmenu",
+    (e) => {
+      if (e.altKey && e.button === 2) {
+        const elListWithSourceCodeLocationList =
+          getElListWithSourceCodeLocation(e.target);
 
-          if (elListWithSourceCodeLocationList.length === 0) {
-            return;
-          }
-
-          e.preventDefault();
-          e.stopPropagation();
-          e.stopImmediatePropagation();
-
-          const componentInfoList = getComponentInfoList(
-            elListWithSourceCodeLocationList,
-          );
-          vueClickToComponentPopoverEl.updateComponentInfoList(
-            componentInfoList,
-          );
-
-          cleanAnchor();
-          setAnchor(elListWithSourceCodeLocationList[0]);
-          vueClickToComponentPopoverEl.showPopover();
-
-          if (document.activeElement) {
-            document.activeElement.blur();
-          }
+        if (elListWithSourceCodeLocationList.length === 0) {
+          return;
         }
-      },
-      true,
-    );
 
-    hidePopover = () => {
-      try {
-        vueClickToComponentPopoverEl.hidePopover();
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+
+        const componentInfoList = getComponentInfoList(
+          elListWithSourceCodeLocationList,
+        );
+        vueClickToComponentPopoverEl.updateComponentInfoList(
+          componentInfoList,
+        );
+
         cleanAnchor();
-      } catch (error) {
-        console.error("[vue-click-to-component] hide popover failed", error);
-      }
-    };
-  }
+        setAnchor(elListWithSourceCodeLocationList[0]);
+        vueClickToComponentPopoverEl.showPopover();
 
-  try {
-    initPopover();
-  } catch (error) {
-    console.warn("[vue-click-to-component] init popover failed", error);
-  }
+        if (document.activeElement) {
+          document.activeElement.blur();
+        }
+      }
+    },
+    true,
+  );
+
+  hidePopover = () => {
+    try {
+      vueClickToComponentPopoverEl.hidePopover();
+      cleanAnchor();
+    } catch (error) {
+      console.error("[vue-click-to-component] hide popover failed", error);
+    }
+  };
+}
+
+try {
+  initPopover();
+} catch (error) {
+  console.warn("[vue-click-to-component] init popover failed", error);
 }
