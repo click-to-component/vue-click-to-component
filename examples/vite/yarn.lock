@@ -423,10 +423,8 @@ vite@^4.3.9:
   optionalDependencies:
     fsevents "~2.3.2"
 
-vue-click-to-component@^0.3.2:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/vue-click-to-component/-/vue-click-to-component-0.3.2.tgz#eb5058b4669e1253af7668fdc6bc7b6d63010f32"
-  integrity sha512-00oDwCnywjhsebbY3wByaf1nTqcJoDYY6mGTCtupfIoHKnKJjh4edn6dgU1M7yA7LmBZ5tLmdU0EUo0gpjrG8Q==
+"vue-click-to-component@file:../..":
+  version "0.3.8"
   dependencies:
     html-tags "^3.3.1"
     parse5 "^7.1.2"

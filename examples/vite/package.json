@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "vue": "^3.2.47",
-    "vue-click-to-component": "^0.3.6"
+    "vue-click-to-component": "file:../.."
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.1.0",
