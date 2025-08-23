@@ -144,9 +144,29 @@ createApp(App).mount("#app");
 默认情况点击会打开 [`vscode`](https://code.visualstudio.com/)，一般不需要下面的配置。只有使用了下面这些情况才需要配置。
 
 <details>
+<summary>Cursor</summary>
+
+如果你正在使用 [`Cursor`](https://cursor.com/)，可以像下面这样修改打开的编辑器：
+
+```diff
+import 'vue-click-to-component/client';
+
++if (process.env.NODE_ENV === 'development') {
++  window.__VUE_CLICK_TO_COMPONENT_URL_FUNCTION__ = function ({
++    sourceCodeLocation
++  }) {
++    return `cursor://file/${sourceCodeLocation}`;
++  };
++}
+```
+
+</details>
+
+
+<details>
 <summary>Visual Studio Code Insiders</summary>
 
-如果你使用 [`vscode-insiders`](https://code.visualstudio.com/insiders/)，可以像下面这样修改编辑器：
+如果你正在使用 [`vscode-insiders`](https://code.visualstudio.com/insiders/)，可以像下面这样修改打开的编辑器：
 
 ```diff
 import 'vue-click-to-component/client';
@@ -165,7 +185,7 @@ import 'vue-click-to-component/client';
 <details>
 <summary>WSL</summary>
 
-如果你使用 [WSL](https://docs.microsoft.com/en-us/windows/wsl/)，你可以像下面这样设置 URL：
+如果你正在使用 [WSL](https://docs.microsoft.com/en-us/windows/wsl/)，你可以像下面这样设置 URL：
 
 ```diff
 import 'vue-click-to-component/client';
@@ -190,7 +210,7 @@ import 'vue-click-to-component/client';
 <details>
 <summary>Docker</summary>
 
-如果你使用 [Docker](https://www.docker.com/) 开发环境，你可以像下面这样修正路径：
+如果你正在使用 [Docker](https://www.docker.com/) 开发环境，你可以像下面这样修正路径：
 
 ```diff
 import 'vue-click-to-component/client';
@@ -219,7 +239,7 @@ import 'vue-click-to-component/client';
 <details>
 <summary>WebStorm</summary>
 
-如果你使用 [WebStorm](https://www.jetbrains.com/webstorm/)，你可以像下面这样设置 URL：
+如果你正在使用 [WebStorm](https://www.jetbrains.com/webstorm/)，你可以像下面这样设置 URL：
 
 ```diff
 import 'vue-click-to-component/client';

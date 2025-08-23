@@ -144,9 +144,28 @@ createApp(App).mount("#app");
 By default, clicking will open [`vscode`](https://code.visualstudio.com/), and generally does not need the following configuration. Those configurations are only required if the following situations are used.
 
 <details>
+<summary>Cursor</summary>
+
+If you are using [`Cursor`](https://cursor.com/), you can set editor like:
+
+```diff
+import 'vue-click-to-component/client';
+
++if (process.env.NODE_ENV === 'development') {
++  window.__VUE_CLICK_TO_COMPONENT_URL_FUNCTION__ = function ({
++    sourceCodeLocation
++  }) {
++    return `cursor://file/${sourceCodeLocation}`;
++  };
++}
+```
+
+</details>
+
+<details>
 <summary>Visual Studio Code Insiders</summary>
 
-If you use [`vscode-insiders`](https://code.visualstudio.com/insiders/), you can set editor like:
+If you are using [`vscode-insiders`](https://code.visualstudio.com/insiders/), you can set editor like:
 
 ```diff
 import 'vue-click-to-component/client';
@@ -165,7 +184,7 @@ import 'vue-click-to-component/client';
 <details>
 <summary>WSL</summary>
 
-If you use [WSL](https://docs.microsoft.com/en-us/windows/wsl/), you can set URL like:
+If you are using [WSL](https://docs.microsoft.com/en-us/windows/wsl/), you can set URL like:
 
 ```diff
 import 'vue-click-to-component/client';
@@ -190,7 +209,7 @@ You can find your WSL target in the `Remote Explorer` panel of VSCode.
 <details>
 <summary>Docker</summary>
 
-If you use [Docker](https://www.docker.com/) development environment, you can fix path like:
+If you are using [Docker](https://www.docker.com/) development environment, you can fix path like:
 
 ```diff
 import 'vue-click-to-component/client';
@@ -219,7 +238,7 @@ import 'vue-click-to-component/client';
 <details>
 <summary>WebStorm</summary>
 
-If you use [WebStorm](https://www.jetbrains.com/webstorm/), you can set URL like:
+If you are using [WebStorm](https://www.jetbrains.com/webstorm/), you can set URL like:
 
 ```diff
 import 'vue-click-to-component/client';
